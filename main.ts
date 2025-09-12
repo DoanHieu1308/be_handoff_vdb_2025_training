@@ -24,9 +24,17 @@ async function bootstrap() {
     const expressApp = app.getHttpAdapter().getInstance();
 
     app.setGlobalPrefix('v1/api');
+    
+    // CORS configuration for production
+    const allowedOrigins = process.env.NODE_ENV === 'production' 
+        ? [process.env.FRONTEND_URL || 'https://your-frontend-domain.com']
+        : ['http://localhost:3000', 'http://localhost:3001'];
+    
     app.enableCors({
-        origin: 'http://localhost:3000',
+        origin: allowedOrigins,
         credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
     });
     
     securityMiddleware().forEach((mw) => expressApp.use(mw));
@@ -49,7 +57,10 @@ async function bootstrap() {
         }),
     );
 
-    await app.listen(5000);
+    // Use dynamic port for Render
+    const port = process.env.PORT || 5000;
+    await app.listen(port);
+    console.log(`🚀 Application is running on: http://localhost:${port}`);
 }
 bootstrap();
 

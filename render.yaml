@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: social-network-api
+    env: node
+    plan: free
+    buildCommand: npm ci --only=production && npm run build
+    startCommand: npm run start:prod
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        fromDatabase:
+          name: mongodb-atlas
+          property: connectionString
+      - key: FRONTEND_URL
+        value: https://your-frontend-domain.com
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=1024
+    healthCheckPath: /v1/api
+    autoDeploy: true
