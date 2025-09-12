@@ -16,7 +16,7 @@ import {  FirebaseAdminModule } from 'module/fcm/firebase-admin.module';
 @Module({
      imports: [
           MongooseModule.forRoot(
-               `mongodb://${config.db.host}:${config.db.port}/${config.db.name}`,
+               config.uri,
                {
                     connectionName: 'MONGODB_CONNECTION',
                     ...config.options,
