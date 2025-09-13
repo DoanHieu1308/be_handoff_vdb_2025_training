@@ -12,6 +12,10 @@ export class FirebaseAdminService implements OnModuleInit {
   ) {}
 
   onModuleInit() {
+    // Skip Firebase initialization for now to fix deployment issues
+    logger.info('Firebase Admin initialization skipped for deployment');
+    return;
+    
     if (!admin.apps.length) {
       try {
         let serviceAccount: any;
@@ -19,11 +23,20 @@ export class FirebaseAdminService implements OnModuleInit {
         if (process.env.FIREBASE_ADMIN_SDK) {
           // 🔹 Render/Production: biến môi trường chứa JSON string
           logger.info('Using Firebase service account from ENV variable');
-          serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN_SDK);
+          serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN_SDK!);
+        } else if (process.env.FIREBASE_PROJECT_ID) {
+          // 🔹 Local: sử dụng environment variables
+          logger.info('Using Firebase service account from environment variables');
+          serviceAccount = {
+            project_id: process.env.FIREBASE_PROJECT_ID,
+            client_email: process.env.FIREBASE_CLIENT_EMAIL,
+            private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+          };
         } else {
-          // 🔹 Local: đọc file service account JSON
+          // 🔹 Fallback: đọc file service account JSON
           const serviceAccountPath = join(
             __dirname,
+            '..',
             '..',
             'utils',
             'training-3f6e4-firebase-adminsdk-fbsvc-24a33b8098.json',

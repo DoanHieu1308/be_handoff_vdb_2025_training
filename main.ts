@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { join } from 'path';
+import { Request, Response } from 'express';
 
 dotenv.config({ path: join(__dirname, '..', '.env') });
 
@@ -21,8 +22,21 @@ async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const expressApp = app.getHttpAdapter().getInstance();
+  
+  // Trust proxy for Render.com (fixes X-Forwarded-For error)
+  app.set('trust proxy', 1);
 
   app.setGlobalPrefix('v1/api');
+
+  // Health check route (for Render.com)
+  app.getHttpAdapter().get('/', (req: Request, res: Response) => {
+    res.status(200).json({
+      status: 'success',
+      message: 'Social Network API is running',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  });
 
   // CORS
   const allowedOrigins =
@@ -69,6 +83,7 @@ async function bootstrap() {
   );
 
   // Render yêu cầu listen 0.0.0.0
+  app.enable('trust proxy');
   const port = process.env.PORT || 5000;
   await app.listen(port, '0.0.0.0');
   console.log(`🚀 Application is running on port: ${port}`);

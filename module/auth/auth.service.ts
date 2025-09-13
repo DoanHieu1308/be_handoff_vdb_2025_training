@@ -72,13 +72,17 @@ export class AuthService {
 
      }
      loginUser = async ({ email, password }: { email: string; password: string }) => {
+          console.log('🔍 Login attempt:', { email, passwordLength: password.length });
           const user = await this.findByEmail({ email });
+          console.log('👤 User found:', !!user);
           if (!user) {
                throw new BadRequestError('Incorrect email or password !');
           }
+          console.log('🔐 Comparing password...');
           const isMatch = await bcrypt.compare(password, user.password);
+          console.log('🔐 Password match:', isMatch);
           if (!isMatch) {
-               throw new AuthFailureError('Invalid password!');
+               throw new BadRequestError('Incorrect email or password !');
           }
 
           const userId = user._id as string;

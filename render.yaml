@@ -22,5 +22,5 @@ services:
         value: 7d
       - key: NODE_OPTIONS
         value: --max-old-space-size=1024
-    healthCheckPath: /v1/api
+    healthCheckPath: /
     autoDeploy: true
