@@ -12,9 +12,15 @@ const dbName = process.env.MONGODB_DB_NAME || 'social_app';
 let uriWithDb = mongoUri;
 if (!mongoUri.includes('/' + dbName) && !mongoUri.includes('/' + dbName + '?')) {
   if (mongoUri.includes('?')) {
-    uriWithDb = `${mongoUri.split('?')[0]}/${dbName}?${mongoUri.split('?')[1]}`;
+    const baseUri = mongoUri.split('?')[0];
+    const queryString = mongoUri.split('?')[1];
+    // Remove trailing slash if exists
+    const cleanBaseUri = baseUri.endsWith('/') ? baseUri.slice(0, -1) : baseUri;
+    uriWithDb = `${cleanBaseUri}/${dbName}?${queryString}`;
   } else {
-    uriWithDb = `${mongoUri}/${dbName}`;
+    // Remove trailing slash if exists
+    const cleanBaseUri = mongoUri.endsWith('/') ? mongoUri.slice(0, -1) : mongoUri;
+    uriWithDb = `${cleanBaseUri}/${dbName}`;
   }
 }
 
