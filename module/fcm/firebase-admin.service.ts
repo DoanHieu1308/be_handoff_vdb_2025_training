@@ -15,8 +15,7 @@ export class FirebaseAdminService implements OnModuleInit {
      onModuleInit() {
           if (!admin.apps.length) {
                try {
-                    const serviceAccountPath =
-                         'E:/Source_training_BE/Source_BE_training/be_training23_8/web_application/api/utils/training-3f6e4-firebase-adminsdk-fbsvc-24a33b8098.json';
+                    const serviceAccountPath = JSON.parse(process.env.FIREBASE_ADMIN_SDK as string);
                     logger.info('Looking for service account at:', serviceAccountPath);
 
                     if (!require('fs').existsSync(serviceAccountPath)) {
