@@ -10,7 +10,11 @@ import { Server, Socket } from 'socket.io';
 import * as jwt from 'jsonwebtoken';
 import { AuthService } from '../auth.service';
 
-@WebSocketGateway({ cors: { origin: 'http://localhost:3000' } })
+@WebSocketGateway({ 
+    cors: { 
+        origin: process.env.FRONTEND_URL || 'http://localhost:3000' 
+    } 
+})
 export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer() server: Server;
 

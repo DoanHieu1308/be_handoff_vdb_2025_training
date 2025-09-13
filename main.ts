@@ -14,8 +14,13 @@ import cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet'; // import đúng cách
 import { securityMiddleware } from 'module/middleware/security.middleware';
+import { instanceMongodb } from './module/database/init.mongodb';
 
 async function bootstrap() {
+  // Initialize MongoDB connection
+  console.log('🔄 Initializing MongoDB connection...');
+  instanceMongodb; // This will trigger the database connection
+  
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const expressApp = app.getHttpAdapter().getInstance();
 
@@ -28,7 +33,7 @@ async function bootstrap() {
       : ['http://localhost:3000', 'http://localhost:3001'];
 
   app.enableCors({
-    origin: allowedOrigins,
+    origin: '*',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],

@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 async function seedUsers() {
-  const uri = 'mongodb://localhost:27017';
+  const uri = process.env.MONGODB_URI || 'mongodb+srv://<username>:<password>@<cluster-url>/<database-name>?retryWrites=true&w=majority';
   const client = new MongoClient(uri);
 
   const firstNames = [
@@ -23,7 +23,7 @@ async function seedUsers() {
 
   try {
     await client.connect();
-    const db = client.db('users_dev');
+    const db = client.db(process.env.MONGODB_DB_NAME || 'users_dev');
     const usersCollection = db.collection('Users');
 
     const users = [];
@@ -60,7 +60,7 @@ seedUsers();
 
 //   try {
 //     await client.connect();
-//     const db = client.db('users_dev');
+//     const db = client.db(process.env.MONGODB_DB_NAME || 'users_dev');
 //     const usersCollection = db.collection('Users');
 
 //     // Tìm các user có email từ user50@example.com đến user10000@example.com
@@ -110,7 +110,7 @@ seedUsers();
 
 //   try {
 //     await client.connect();
-//     const db = client.db('users_dev');
+//     const db = client.db(process.env.MONGODB_DB_NAME || 'users_dev');
 //     const usersCollection = db.collection('Users');
 
 //     const regex = /^user(\d+)@example\.com$/;
