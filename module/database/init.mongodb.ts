@@ -13,7 +13,7 @@ export class Database {
   private connect(): void {
     console.log('🔄 Attempting to connect to MongoDB Atlas...');
     console.log('📍 Connection URI:', config.uri.replace(/\/\/.*@/, '//***:***@')); // Hide credentials
-    
+
     mongoose.set('debug', process.env.NODE_ENV === 'development');
 
     mongoose
@@ -23,7 +23,7 @@ export class Database {
         console.log('📊 Database:', mongoose.connection.db?.databaseName);
         console.log('🌐 Host:', mongoose.connection.host);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error('❌ Failed to connect to MongoDB Atlas:', err.message);
         console.error('🔍 Please check your MONGODB_URI in .env file');
         process.exit(1);
