@@ -13,6 +13,8 @@ import { NotificationsModule } from 'module/notification/notification.module';
 import { CommentModule } from 'module/comment/comment.module';
 import {  FirebaseAdminModule } from 'module/fcm/firebase-admin.module';
 
+import { AppController } from './app.controller';
+
 @Module({
      imports: [
           MongooseModule.forRoot(
@@ -38,5 +40,6 @@ import {  FirebaseAdminModule } from 'module/fcm/firebase-admin.module';
           FirebaseAdminModule,
           CommentModule,
      ],
+     controllers: [AppController],
 })
 export class AppModule { }
