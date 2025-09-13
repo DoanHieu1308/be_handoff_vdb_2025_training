@@ -3,76 +3,81 @@ import * as admin from 'firebase-admin';
 import { logger } from 'utils/logger';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { log } from 'console';
-import { UserRepository } from 'module/user/user.repository';
 import { FirebaseAdminRepository } from './firebase-admin.repository';
 
 @Injectable()
 export class FirebaseAdminService implements OnModuleInit {
-     constructor(
-          private readonly firebaseAdminRepository: FirebaseAdminRepository,
-     ) { }
-     onModuleInit() {
-          if (!admin.apps.length) {
-               try {
-                    const serviceAccountPath = JSON.parse(process.env.FIREBASE_ADMIN_SDK as string);
-                    logger.info('Looking for service account at:', serviceAccountPath);
+  constructor(
+    private readonly firebaseAdminRepository: FirebaseAdminRepository,
+  ) {}
 
-                    if (!require('fs').existsSync(serviceAccountPath)) {
-                         throw new Error(
-                              `Service account file not found at: ${serviceAccountPath}`,
-                         );
-                    }
+  onModuleInit() {
+    if (!admin.apps.length) {
+      try {
+        let serviceAccount: any;
 
-                    const serviceAccount = JSON.parse(
-                         readFileSync(serviceAccountPath, 'utf8'),
-                    );
-
-                    admin.initializeApp({
-                         credential: admin.credential.cert({
-                              projectId: serviceAccount.project_id,
-                              clientEmail: serviceAccount.client_email,
-                              privateKey: serviceAccount.private_key,
-                         }),
-                    });
-                    logger.info('Firebase Admin initialized successfully');
-               } catch (error) {
-                    logger.error('Failed to initialize Firebase Admin:', error);
-                    throw error;
-               }
-          }
-     }
-
-     async sendPushNotification(
-          token: string,
-          title: string,
-          body: string,
-          image?: string,
-          data: Record<string, string> = {},
-     ) {
-          return this.firebaseAdminRepository.sendPushNotification(
-               token,
-               title,
-               body,
-               image,
-               data,
+        if (process.env.FIREBASE_ADMIN_SDK) {
+          // 🔹 Render/Production: biến môi trường chứa JSON string
+          logger.info('Using Firebase service account from ENV variable');
+          serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN_SDK);
+        } else {
+          // 🔹 Local: đọc file service account JSON
+          const serviceAccountPath = join(
+            __dirname,
+            '..',
+            'utils',
+            'training-3f6e4-firebase-adminsdk-fbsvc-24a33b8098.json',
           );
-     }
+          logger.info('Using Firebase service account from local file');
+          serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
+        }
 
-     async updateFcmToken(userId: string, fcmToken: string) {
-          console.log("data fcm1", fcmToken)
-          return this.firebaseAdminRepository.updateFcmToken(userId, fcmToken);
-     }
-     async getUserFcmInfo(userId: string) {
-          const doc = await this.firebaseAdminRepository.findUserInfoWithFcm(userId);
+        admin.initializeApp({
+          credential: admin.credential.cert({
+            projectId: serviceAccount.project_id,
+            clientEmail: serviceAccount.client_email,
+            privateKey: serviceAccount.private_key.replace(/\\n/g, '\n'), // fix lỗi xuống dòng
+          }),
+        });
 
-          if (!doc) return null;
+        logger.info('✅ Firebase Admin initialized successfully');
+      } catch (error) {
+        logger.error('❌ Failed to initialize Firebase Admin:', error);
+        throw error;
+      }
+    }
+  }
 
-          return {
-               fcm_token: doc.fcm_token,
-               name: doc.userId?.name || null,
-               avatar: doc.userId?.avatar || null
-          };
-     }
+  async sendPushNotification(
+    token: string,
+    title: string,
+    body: string,
+    image?: string,
+    data: Record<string, string> = {},
+  ) {
+    return this.firebaseAdminRepository.sendPushNotification(
+      token,
+      title,
+      body,
+      image,
+      data,
+    );
+  }
 
+  async updateFcmToken(userId: string, fcmToken: string) {
+    logger.info(`Updating FCM token for user: ${userId}`);
+    return this.firebaseAdminRepository.updateFcmToken(userId, fcmToken);
+  }
+
+  async getUserFcmInfo(userId: string) {
+    const doc = await this.firebaseAdminRepository.findUserInfoWithFcm(userId);
+
+    if (!doc) return null;
+
+    return {
+      fcm_token: doc.fcm_token,
+      name: doc.userId?.name || null,
+      avatar: doc.userId?.avatar || null,
+    };
+  }
 }
