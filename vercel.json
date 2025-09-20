@@ -1,4 +1,5 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "builds": [
     {
@@ -6,6 +7,13 @@
       "use": "@vercel/node"
     }
   ],
+  "functions": {
+    "main.ts": {
+      "runtime": "nodejs18.x",
+      "maxDuration": 30,
+      "memory": 1024
+    }
+  },
   "routes": [
     {
       "src": "/(.*)",
@@ -15,9 +23,9 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "functions": {
-    "main.ts": {
-      "maxDuration": 30
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
     }
   }
 }
