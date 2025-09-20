@@ -36,6 +36,8 @@ npm install
 npm run start:dev
 ```
 
+**Lưu ý:** Vercel sẽ tự động detect TypeScript và build từ `main.ts` thành `dist/main.js`
+
 ---
 
 ## 🔧 ENVIRONMENT VARIABLES CẦN THÊM

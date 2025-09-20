@@ -7,13 +7,6 @@
       "use": "@vercel/node"
     }
   ],
-  "functions": {
-    "main.ts": {
-      "runtime": "nodejs18.x",
-      "maxDuration": 30,
-      "memory": 1024
-    }
-  },
   "routes": [
     {
       "src": "/(.*)",
@@ -22,10 +15,5 @@
   ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "build": {
-    "env": {
-      "NODE_ENV": "production"
-    }
   }
 }
