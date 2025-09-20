@@ -26,8 +26,14 @@ async function bootstrap() {
   console.log('🔄 Initializing MongoDB Atlas connection...');
   try {
     instanceMongodb;
+    console.log('✅ MongoDB connection initialized');
   } catch (error) {
     console.error('❌ MongoDB connection error:', error);
+    console.error('❌ MongoDB error details:', {
+      message: error.message,
+      name: error.name,
+      code: error.code
+    });
     // Không crash function, chỉ log error
   }
 
@@ -107,15 +113,27 @@ async function bootstrap() {
 // For Vercel serverless
 export default async (req: any, res: any) => {
   try {
+    console.log('🚀 Function started - Method:', req.method, 'URL:', req.url);
     const app = await bootstrap();
+    console.log('✅ App initialized successfully');
     const handler = app.getHttpAdapter().getInstance();
+    console.log('✅ Handler created successfully');
     return handler(req, res);
   } catch (error) {
-    console.error('❌ Serverless function error:', error);
+    console.error('❌ Function error:', error);
+    console.error('❌ Error stack:', error.stack);
+    console.error('❌ Error details:', {
+      message: error.message,
+      name: error.name,
+      code: error.code
+    });
+    
     res.status(500).json({
       status: 'error',
       message: 'Internal server error',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong',
+      timestamp: new Date().toISOString(),
+      requestId: req.headers['x-vercel-id'] || 'unknown'
     });
   }
 };
