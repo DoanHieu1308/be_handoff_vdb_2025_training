@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Req, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { FirebaseAdminService } from "./firebase-admin.service";
-import { AuthGuard } from "module/auth/guards/access-token.guard";
-import { AuthRequest } from "module/auth/interfaces/auth-request.interface";
+import { AuthGuard } from "../auth/guards/access-token.guard";
+import { AuthRequest } from "../auth/interfaces/auth-request.interface";
 
 @Controller('fcm')
 export class FirebaseAdminController {

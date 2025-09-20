@@ -8,9 +8,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { logger } from '../../utils/logger';
 import { UserDto } from './user.dto';
 import { FriendService } from '../firends/friends.service';
-import { UploadService } from 'module/upload/upload.service';
+import { UploadService } from '../upload/upload.service';
 import { SuccessResponse } from 'utils/success.response';
-import { FriendRelation, FriendRelationDocument } from 'module/firends/friend.model';
+import { FriendRelation, FriendRelationDocument } from '../firends/friend.model';
 import { UserRepository } from './user.repository';
 
 const meFields = ['_id', 'name', 'email', 'bio', 'avatar', 'phone', 'birthday'];

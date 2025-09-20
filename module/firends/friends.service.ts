@@ -21,9 +21,9 @@ import { FORBIDDEN_MESSAGE } from '@nestjs/core/guards';
 import { filter } from 'lodash';
 import { from } from 'rxjs';
 import { FriendRepository } from './friend.repository';
-import { NotificationsService } from 'module/notification/notification.service';
-import { UserService } from 'module/user/user.service';
-import { FirebaseAdminService } from 'module/fcm/firebase-admin.service';
+import { NotificationsService } from '../notification/notification.service';
+import { UserService } from '../user/user.service';
+import { FirebaseAdminService } from '../fcm/firebase-admin.service';
 @Injectable()
 export class FriendService {
      constructor(

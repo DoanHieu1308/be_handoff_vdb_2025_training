@@ -3,9 +3,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Comment, CommentSchema } from './comment.model';
 import { CommentService } from './comment.service';
 import { CommentRepository } from './comment.repository';
-import { AuthModule } from 'module/auth/module.auth';
+import { AuthModule } from '../auth/module.auth';
 import { CommentController } from './comment.controller';
-import { PostsModule } from 'module/posts/posts.module';
+import { PostsModule } from '../posts/posts.module';
 import { CommentGateway } from './comment.gateway';
 
 @Module({

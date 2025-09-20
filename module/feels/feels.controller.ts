@@ -2,7 +2,7 @@ import { Controller, Post, Param, Body, Req, UseGuards, BadRequestException } fr
 import { FeelService } from './feels.service';
 import { AuthGuard } from '../auth/guards/access-token.guard'; // tuỳ hệ thống của bạn
 import { CreateFeelDto } from './create-feel.dto';
-import { AuthRequest } from 'module/auth/interfaces/auth-request.interface';
+import { AuthRequest } from '../auth/interfaces/auth-request.interface';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
 

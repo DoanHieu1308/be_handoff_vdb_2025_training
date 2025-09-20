@@ -40,7 +40,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const expressApp = app.getHttpAdapter().getInstance();
   
-  // Trust proxy for Vercel/Render.com (fixes X-Forwarded-For error)
+  // Trust proxy for Vercel (fixes X-Forwarded-For error)
   app.set('trust proxy', 1);
 
   app.setGlobalPrefix('v1/api');
@@ -138,8 +138,8 @@ export default async (req: any, res: any) => {
   }
 };
 
-// For traditional server deployment
-if (process.env.NODE_ENV !== 'vercel') {
+// For traditional server deployment (local development)
+if (process.env.NODE_ENV !== 'vercel' && process.env.NODE_ENV !== 'production') {
   bootstrap().then(async (app) => {
     app.enable('trust proxy');
     const port = process.env.PORT || 5000;

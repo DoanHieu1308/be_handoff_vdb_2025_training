@@ -6,8 +6,8 @@ import { FriendService } from './friends.service';
 import { AuthModule } from '../auth/module.auth';
 import { UserModule } from '../user/user.module';
 import { FriendRepository } from './friend.repository';
-import { NotificationsModule } from 'module/notification/notification.module';
-import { FirebaseAdminModule } from 'module/fcm/firebase-admin.module';
+import { NotificationsModule } from '../notification/notification.module';
+import { FirebaseAdminModule } from '../fcm/firebase-admin.module';
 
 @Module({
     imports: [

@@ -23,11 +23,11 @@ import { logger } from '../../utils/logger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import path from 'path';
 import { ApiBasicAuth, ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'module/auth/guards/access-token.guard';
-import { AuthRequest } from 'module/auth/interfaces/auth-request.interface';
-import { uploadConfig } from 'module/upload/utils/multer.config';
+import { AuthGuard } from '../auth/guards/access-token.guard';
+import { AuthRequest } from '../auth/interfaces/auth-request.interface';
+import { uploadConfig } from '../upload/utils/multer.config';
 import { AuthFailureError } from 'utils/error.response';
-import { MulterS3File } from 'module/upload/utils/multe.s3.file';
+import { MulterS3File } from '../upload/utils/multe.s3.file';
 
 
 @ApiTags('User')

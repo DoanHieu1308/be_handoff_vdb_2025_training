@@ -1,9 +1,9 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { NotificationsModule } from 'module/notification/notification.module';
+import { NotificationsModule } from '../notification/notification.module';
 import { FirebaseAdmin, FirebaseAdminSchema } from './firebase-admin.model';
-import { FriendSchema } from 'module/firends/friend.model';
+import { FriendSchema } from '../firends/friend.model';
 import { FirebaseAdminService } from './firebase-admin.service';
 import { FirebaseAdminRepository } from './firebase-admin.repository';
 import { FirebaseAdminController } from './firebase-admin.controller';

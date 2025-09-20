@@ -1,16 +1,16 @@
-import { PostsModule } from 'module/posts/posts.module';
+import { PostsModule } from '../posts/posts.module';
 import { Post, PostDocument } from './posts.model';
 import { extractMetadata } from './../../utils/extractMetadata';
 import { ApiTags } from '@nestjs/swagger';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { logger } from 'utils/logger';
-import { FriendService } from 'module/firends/friends.service';
+import { FriendService } from '../firends/friends.service';
 import { Types } from 'mongoose';
 import { CreatePostDto, EditPostDto } from './create-post.dto';
 import { FriendRelation } from '../firends/friend.model';
 import { PostRepository } from './post.reponsitory';
 import { convertToObject } from 'utils/index';
-import { CommentService } from 'module/comment/comment.service';
+import { CommentService } from '../comment/comment.service';
 
 @ApiTags('Post')
 @Injectable()

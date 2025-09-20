@@ -103,9 +103,7 @@ test/
 README.md
 docs/
 
-# Docker files
-Dockerfile
-docker-compose.yml
+# Docker files (removed - using Vercel only)
 
 # Git
 .git/

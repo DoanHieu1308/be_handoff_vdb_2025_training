@@ -22,8 +22,8 @@ import { logger } from '../../utils/logger';
 import { BadRequestError, NotFoundError } from '../../utils/error.response';
 
 import { ApiBearerAuth, ApiBody, ApiHeader, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
-import { AuthGuard } from 'module/auth/guards/access-token.guard';
-import { AuthRequest } from 'module/auth/interfaces/auth-request.interface';
+import { AuthGuard } from '../auth/guards/access-token.guard';
+import { AuthRequest } from '../auth/interfaces/auth-request.interface';
 
 
 @Controller('friends')

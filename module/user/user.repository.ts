@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.model';
-import { FriendRelation, FriendRelationDocument } from 'module/firends/friend.model';
+import { FriendRelation, FriendRelationDocument } from '../firends/friend.model';
 
 @Injectable()
 export class UserRepository {

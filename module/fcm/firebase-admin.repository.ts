@@ -3,7 +3,7 @@ import { FirebaseAdminService } from './firebase-admin.service';
 import * as admin from 'firebase-admin';
 import { FirebaseAdmin, FirebaseAdminDocument, FirebaseAdminSchema } from './firebase-admin.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { FriendRelationDocument } from 'module/firends/friend.model';
+import { FriendRelationDocument } from '../firends/friend.model';
 import { Model } from 'mongoose';
 @Injectable()
 export class FirebaseAdminRepository {

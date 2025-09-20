@@ -17,7 +17,7 @@ import {
      HttpCode,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { AuthGuard } from 'module/auth/guards/access-token.guard';
+import { AuthGuard } from '../auth/guards/access-token.guard';
 import {
      ApiBearerAuth,
      ApiBody,
@@ -26,10 +26,10 @@ import {
      ApiQuery,
 } from '@nestjs/swagger';
 import { isValidUrl } from '../../utils/index';
-import { AuthRequest } from 'module/auth/interfaces/auth-request.interface';
+import { AuthRequest } from '../auth/interfaces/auth-request.interface';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { uploadConfig } from 'module/upload/utils/multer.config';
-import { MulterS3File } from 'module/upload/utils/multe.s3.file';
+import { uploadConfig } from '../upload/utils/multer.config';
+import { MulterS3File } from '../upload/utils/multe.s3.file';
 import { CreatePostDto, EditPostDto } from './create-post.dto';
 import { logger } from 'utils/logger';
 import { SuccessResponse } from 'utils/success.response';
