@@ -24,7 +24,12 @@ async function bootstrap() {
 
   // Kết nối Mongo Atlas ngay khi khởi động
   console.log('🔄 Initializing MongoDB Atlas connection...');
-  instanceMongodb;
+  try {
+    instanceMongodb;
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error);
+    // Không crash function, chỉ log error
+  }
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const expressApp = app.getHttpAdapter().getInstance();
@@ -74,10 +79,15 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
 
-  // Static upload
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
-    prefix: '/uploads',
-  });
+  // Static upload (chỉ khi folder tồn tại)
+  try {
+    const uploadsPath = join(__dirname, '..', 'uploads');
+    app.useStaticAssets(uploadsPath, {
+      prefix: '/uploads',
+    });
+  } catch (error) {
+    console.log('⚠️ Uploads folder not found, skipping static assets');
+  }
 
   // Pipes
   app.useGlobalPipes(
@@ -96,9 +106,18 @@ async function bootstrap() {
 
 // For Vercel serverless
 export default async (req: any, res: any) => {
-  const app = await bootstrap();
-  const handler = app.getHttpAdapter().getInstance();
-  return handler(req, res);
+  try {
+    const app = await bootstrap();
+    const handler = app.getHttpAdapter().getInstance();
+    return handler(req, res);
+  } catch (error) {
+    console.error('❌ Serverless function error:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
+    });
+  }
 };
 
 // For traditional server deployment
