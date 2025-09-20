@@ -2,10 +2,26 @@ import { createLogger, transports, format } from 'winston';
 import * as fs from 'fs';
 import * as path from 'path';
 
+// Check if running in Vercel serverless environment
+const isVercel = process.env.VERCEL === '1' || process.env.NODE_ENV === 'production';
 
-const logDir = path.join(__dirname, '..', '..', 'logs');
-if (!fs.existsSync(logDir)) {
-    fs.mkdirSync(logDir);
+let logDir: string | null = null;
+let fileTransports: any[] = [];
+
+// Only create file transports if not in Vercel
+if (!isVercel) {
+    try {
+        logDir = path.join(__dirname, '..', '..', 'logs');
+        if (!fs.existsSync(logDir)) {
+            fs.mkdirSync(logDir, { recursive: true });
+        }
+        fileTransports = [
+            new transports.File({ filename: path.join(logDir, 'error.log'), level: 'error' }),
+            new transports.File({ filename: path.join(logDir, 'app.log') }),
+        ];
+    } catch (error) {
+        console.warn('⚠️ Could not create logs directory, using console only:', error.message);
+    }
 }
 
 export const logger = createLogger({
@@ -22,8 +38,7 @@ export const logger = createLogger({
     ),
     transports: [
         new transports.Console(),
-        new transports.File({ filename: path.join(logDir, 'error.log'), level: 'error' }),
-        new transports.File({ filename: path.join(logDir, 'app.log') }),
+        ...fileTransports, // Only add file transports if not in Vercel
     ],
 });
 
