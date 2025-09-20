@@ -12,6 +12,8 @@
   "start:dev": "nest start --watch",
   "start:debug": "nest start --debug --watch",
   "start:prod": "node --max-old-space-size=1024 dist/main.js",
+  "vercel-build": "nest build",
+  "vercel-dev": "nest start --watch",
   "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
   "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
   "test": "jest",

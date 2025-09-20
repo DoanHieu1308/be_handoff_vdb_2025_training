@@ -15,7 +15,13 @@ import helmet from 'helmet';
 import { securityMiddleware } from 'module/middleware/security.middleware';
 import { instanceMongodb } from './module/database/init.mongodb';
 
+let cachedApp: any;
+
 async function bootstrap() {
+  if (cachedApp) {
+    return cachedApp;
+  }
+
   // Kết nối Mongo Atlas ngay khi khởi động
   console.log('🔄 Initializing MongoDB Atlas connection...');
   instanceMongodb;
@@ -23,12 +29,12 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const expressApp = app.getHttpAdapter().getInstance();
   
-  // Trust proxy for Render.com (fixes X-Forwarded-For error)
+  // Trust proxy for Vercel/Render.com (fixes X-Forwarded-For error)
   app.set('trust proxy', 1);
 
   app.setGlobalPrefix('v1/api');
 
-  // Health check route (for Render.com)
+  // Health check route
   app.getHttpAdapter().get('/', (req: Request, res: Response) => {
     res.status(200).json({
       status: 'success',
@@ -82,10 +88,25 @@ async function bootstrap() {
     }),
   );
 
-  // Render yêu cầu listen 0.0.0.0
-  app.enable('trust proxy');
-  const port = process.env.PORT || 5000;
-  await app.listen(port, '0.0.0.0');
-  console.log(`🚀 Application is running on port: ${port}`);
+  // Initialize app for Vercel serverless
+  await app.init();
+  cachedApp = app;
+  return app;
 }
-bootstrap();
+
+// For Vercel serverless
+export default async (req: any, res: any) => {
+  const app = await bootstrap();
+  const handler = app.getHttpAdapter().getInstance();
+  return handler(req, res);
+};
+
+// For traditional server deployment
+if (process.env.NODE_ENV !== 'vercel') {
+  bootstrap().then(async (app) => {
+    app.enable('trust proxy');
+    const port = process.env.PORT || 5000;
+    await app.listen(port, '0.0.0.0');
+    console.log(`🚀 Application is running on port: ${port}`);
+  });
+}
