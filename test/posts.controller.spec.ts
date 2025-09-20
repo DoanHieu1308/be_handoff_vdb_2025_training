@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ExecutionContext } from '@nestjs/common';
 import request from 'supertest';
-import { PostsController } from 'module/posts/posts.controller';
-import { PostsService } from 'module/posts/posts.service';
-import { AuthGuard } from 'module/auth/guards/access-token.guard';
+import { PostsController } from '../module/posts/posts.controller';
+import { PostsService } from '../module/posts/posts.service';
+import { AuthGuard } from '../module/auth/guards/access-token.guard';
 import { describe, it } from 'node:test';
 
 describe('PostsController (HTTP)', () => {

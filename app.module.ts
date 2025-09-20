@@ -7,11 +7,11 @@ import config from './module/database/config';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 //import { FollowModule } from 'module/follow/follow.module';
-import { PostsModule } from 'module/posts/posts.module';
-import { FeelModule } from 'module/feels/feels.module';
-import { NotificationsModule } from 'module/notification/notification.module';
-import { CommentModule } from 'module/comment/comment.module';
-import {  FirebaseAdminModule } from 'module/fcm/firebase-admin.module';
+import { PostsModule } from './module/posts/posts.module';
+import { FeelModule } from './module/feels/feels.module';
+import { NotificationsModule } from './module/notification/notification.module';
+import { CommentModule } from './module/comment/comment.module';
+import {  FirebaseAdminModule } from './module/fcm/firebase-admin.module';
 
 import { AppController } from './app.controller';
 

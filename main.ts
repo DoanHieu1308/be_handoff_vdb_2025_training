@@ -12,7 +12,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
-import { securityMiddleware } from 'module/middleware/security.middleware';
+import { securityMiddleware } from './module/middleware/security.middleware';
 import { instanceMongodb } from './module/database/init.mongodb';
 
 let cachedApp: any;
@@ -40,8 +40,11 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const expressApp = app.getHttpAdapter().getInstance();
   
-  // Trust proxy for Vercel (fixes X-Forwarded-For error)
-  app.set('trust proxy', 1);
+        // Trust proxy for Vercel (fixes X-Forwarded-For error)
+        // Only set trust proxy in Vercel environment
+        if (process.env.VERCEL === '1') {
+            app.set('trust proxy', 1);
+        }
 
   app.setGlobalPrefix('v1/api');
 

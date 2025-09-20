@@ -38,6 +38,10 @@ export function securityMiddleware() {
             message: 'Too many requests from this IP. Please try again later!',
             standardHeaders: true,
             legacyHeaders: false,
+            // Skip rate limiting in Vercel serverless environment
+            skip: (req) => {
+                return process.env.VERCEL === '1';
+            },
         }),
 
         // Slow down - delay sau 50 request
@@ -47,6 +51,10 @@ export function securityMiddleware() {
             delayMs: 500,
             validate: {
                 delayMs: false, 
+            },
+            // Skip slow down in Vercel serverless environment
+            skip: (req) => {
+                return process.env.VERCEL === '1';
             },
         }),
 
